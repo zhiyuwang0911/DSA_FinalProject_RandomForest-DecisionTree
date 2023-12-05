@@ -64,7 +64,7 @@ class DecisionTreeClassifier():
             print("%sleft:" % (indent), end="")
             self.printTree(tree.leftChild, indent + indent)
             print("%sright:" % (indent), end="")
-            self.printTree(tree.right, indent + indent)
+            self.printTree(tree.rightChild, indent + indent)
 
     # Finding the most effective way to split data
     def getBestSplit(self, dataset, num_samples, num_features):
@@ -112,9 +112,9 @@ class DecisionTreeClassifier():
         if tree.value!=None: return tree.value
         feature_val = x[tree.feature_index]
         if feature_val<=tree.threshold:
-            return self.singlePrediction(x, tree.left)
+            return self.singlePrediction(x, tree.leftChild)
         else:
-            return self.singlePrediction(x, tree.right)
+            return self.singlePrediction(x, tree.rightChild)
         
     # Computing information gain 
     def getInfoGain(self, parent, leftNode, rightNode, mode="entropy"):

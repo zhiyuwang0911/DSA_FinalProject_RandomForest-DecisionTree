@@ -1,3 +1,5 @@
+import numpy as np
+import random
 def entropy(p):
     if p == 0:
         return 0
@@ -20,9 +22,9 @@ def draw_bootstrap(X_train, y_train):
     bootstrap_indices = list(np.random.choice(range(len(X_train)), len(X_train), replace = True))
     oob_indices = [i for i in range(len(X_train)) if i not in bootstrap_indices]
     X_bootstrap = X_train.iloc[bootstrap_indices].values
-    y_bootstrap = y_train[bootstrap_indices]
+    y_bootstrap = y_train.iloc[bootstrap_indices].values
     X_oob = X_train.iloc[oob_indices].values
-    y_oob = y_train[oob_indices]
+    y_oob = y_train.iloc[oob_indices].values
     return X_bootstrap, y_bootstrap, X_oob, y_oob
 
 def oob_score(tree, X_test, y_test):
@@ -38,16 +40,16 @@ def find_split_point(X_bootstrap, y_bootstrap, max_features):
     num_features = len(X_bootstrap[0])
 
     while len(feature_ls) <= max_features:
-    feature_idx = random.sample(range(num_features), 1)
+        feature_idx = random.sample(range(num_features), 1)
     if feature_idx not in feature_ls:
         feature_ls.extend(feature_idx)
 
     best_info_gain = -999
     node = None
     for feature_idx in feature_ls:
-    for split_point in X_bootstrap[:,feature_idx]:
-        left_child = {'X_bootstrap': [], 'y_bootstrap': []}
-        right_child = {'X_bootstrap': [], 'y_bootstrap': []}
+        for split_point in X_bootstrap[:,feature_idx]:
+            left_child = {'X_bootstrap': [], 'y_bootstrap': []}
+            right_child = {'X_bootstrap': [], 'y_bootstrap': []}
 
         # split children for continuous variables
         if type(split_point) in [int, float]:
